@@ -2,8 +2,9 @@
 -- +goose StatementBegin
 CREATE TABLE location_points(
     id SERIAL PRIMARY KEY,
-    lat INT NOT NULL,
-    lng INT NOT NULL
+    lat DOUBLE PRECISION NOT NULL,
+    lng DOUBLE PRECISION NOT NULL,
+    name TEXT
 )
 -- +goose StatementEnd
 
