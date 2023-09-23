@@ -19,7 +19,15 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
-                    travelMode: 'DRIVING'
+                    waypoints: [
+                    {
+                    location: 'Straße des 17. Juni',
+                    stopover: false
+                    },{
+                    location: 'Budapester Straße',
+                    stopover: false
+                    }],
+                    travelMode: 'DRIVING',
                 }, function(response, status) {
                     if (status === 'OK') {
                         directionsRenderer.setDirections(response);

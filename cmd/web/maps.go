@@ -48,3 +48,7 @@ func (app *application) handleNewMap(w http.ResponseWriter, r *http.Request) {
 	data.MapsAPI = app.config.gmaps.apiKey
 	app.renderPage(w, http.StatusOK, "new-map.html", data)
 }
+
+func (app *application) handleRoute(w http.ResponseWriter, r *http.Request) {
+	app.models.Map.CalcRoute()
+}
