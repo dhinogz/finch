@@ -2,7 +2,7 @@ dev:
 	docker compose up -d
 	@echo "Waiting for db..."
 	@sleep 2
-	goose -dir="./migrations" postgres "$FINCH_DB_DSN" up
+	goose -dir="./migrations" postgres "$$FINCH_DB_DSN" up
 	modd
 
 prod:
