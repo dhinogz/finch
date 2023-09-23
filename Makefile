@@ -15,5 +15,5 @@ down/db:
 	docker compose down --remove-orphans -v
 
 migrate:
-	goose -dir="./migrations" postgres "$FINCH_DB_DSN" up
+	goose -dir="./migrations" postgres "$$FINCH_DB_DSN" up
 
