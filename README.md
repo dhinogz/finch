@@ -5,6 +5,7 @@
 1. Install dependencies
 - Go
 - modd
+- goose
 - docker and docker compose
 - Makefile
 
@@ -15,7 +16,7 @@ cp .env.example .env
 
 3. Add database env variable to source shell file
 ```
-export FINCH_DB_DSN='postgres://finch:finch@localhost/finch?sslmode=disable'
+export FINCH_DB_DSN='host=localhost user=finch password=finch dbname=finch sslmode=disable'
 ```
 
 4. Start program
