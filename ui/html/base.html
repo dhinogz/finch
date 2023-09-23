@@ -1,0 +1,29 @@
+{{define "header"}}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@3.6.2/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <title>Finch</title>
+  </head>
+
+  <body>
+    <header>
+      {{template "nav" .}}
+    </header>
+{{end}}
+
+{{define "footer"}}
+  </body>
+
+  <script src="/static/js/htmx.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</html>
+{{end}}
+
