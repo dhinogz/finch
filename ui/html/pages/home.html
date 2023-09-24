@@ -1,5 +1,4 @@
 {{template "header" .}}
-
 <div class="flex flex-wrap">
     <div class="w-full lg:w-1/2 p-4">
         {{template "place-form" .}}
@@ -11,6 +10,10 @@
             {{end}}
         </div>
         {{template "map-render" .}}
+    </div>
+    <div>
+    {{template "report-form" .}}
+
     </div>
 </div>
 
