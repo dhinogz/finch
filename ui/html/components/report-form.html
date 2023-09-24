@@ -4,7 +4,17 @@
       <input type='hidden' name='report-location' id='report-location' value=''>       
     </div>
     <div>
-      <input class="btn btn-primary" type='submit' value='Report'>
+      <button class="btn btn-ghost w-20 h-20" type='submit' value='Report'>
+        <svg viewBox="232.0959 129.8777 147.6043 126.4303" class=" right-0 bottom-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="SvgjsLinearGradient1022">
+              <stop id="SvgjsStop1023" stop-color="#ef4136" offset="0"/>
+              <stop id="SvgjsStop1024" stop-color="#fbb040" offset="1"/>
+            </linearGradient>
+          </defs>
+          <path fill-rule="evenodd" d="M 287.382 139.993 C 295.611 126.506 316.186 126.506 324.408 139.993 L 376.808 225.961 C 385.03 239.449 374.742 256.308 358.292 256.308 L 253.498 256.308 C 237.048 256.308 226.767 239.449 234.989 225.961 L 287.375 139.993 L 287.382 139.993 Z M 305.899 175.377 C 308.848 175.377 311.242 177.643 311.242 180.435 L 311.242 205.724 C 311.242 209.615 306.789 212.049 303.227 210.107 C 301.574 209.203 300.555 207.531 300.555 205.724 L 300.555 180.435 C 300.555 177.643 302.942 175.377 305.899 175.377 Z M 305.899 231.012 C 310.009 231.012 312.581 226.798 310.522 223.426 C 309.568 221.861 307.808 220.897 305.899 220.897 C 301.781 220.897 299.216 225.112 301.268 228.483 C 302.222 230.048 303.989 231.012 305.899 231.012 Z" clip-rule="evenodd" fill="url(#SvgjsLinearGradient1022)"/>
+        </svg> 
+      </button>
     </div>
   </form>
 
@@ -12,7 +22,8 @@
     var locLat = localStorage.getItem("currentLat")
     var locLng = localStorage.getItem("currentLng")
     var pos = [locLat, locLng]
-    document.getElementById('report-location').value = pos;
+    document.getElementById('report-location').value = pos; 
   </script> 
 
 {{end}}
+
