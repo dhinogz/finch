@@ -1,6 +1,8 @@
 package data
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type Report struct {
 	ID          int
@@ -12,14 +14,22 @@ type ReportModel struct {
 	DB *sql.DB
 }
 
-func (rm *ReportModel) Insert(reportType, description string) error {
-	r := Report{}
-	stmt := `
-		INSERT INTO reports (report_type, report_description)
-		VALUES ($1, $2) RETURNING id
+func (rm *ReportModel) Insert(user_id int, reportType string, description string) error {
+	locstmt := `
+		INSERT INTO location_points (lat, lng)
+		VALUES (37.782, -122.445);
 	`
-	row := rm.DB.QueryRow(stmt, reportType, description)
-	err := row.Scan(&r.ID)
+
+	_, err := rm.DB.Exec(locstmt)
+	if err != nil {
+		return err
+	}
+
+	stmt := `
+		INSERT INTO reports (user_id, report_type, report_description)
+		VALUES ($1, $2, $3) RETURNING id
+	`
+	_, err = rm.DB.Exec(stmt, user_id, reportType, description)
 	if err != nil {
 		return err
 	}

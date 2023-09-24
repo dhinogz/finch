@@ -29,7 +29,12 @@ func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = app.models.Report.Insert(form.Type, form.Description)
+	err = app.models.Report.Insert(1, form.Type, form.Description)
+	fmt.Println(err)
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 
