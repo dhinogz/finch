@@ -64,5 +64,6 @@ func (app *application) handleRoute(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data.Route = route
+	data.MapsAPI = app.config.gmaps.apiKey
 	app.renderPage(w, http.StatusOK, "home.html", data)
 }
