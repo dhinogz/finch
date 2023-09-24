@@ -103,6 +103,14 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
+                    waypoints: [
+                        {{range .Waypoints}}
+                        {
+                            location: "{{.Lat}},{{.Lng}}",
+                            stopover: false
+                        },
+                        {{end}}
+                    ],
                     travelMode: 'DRIVING'
                 }, function(response, status) {
                     if (status === 'OK') {
