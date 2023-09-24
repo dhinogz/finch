@@ -13,13 +13,15 @@ var (
 )
 
 type Models struct {
-	User UserModel
-	Map  MapModel
+	User   UserModel
+	Report ReportModel
+	Map    MapModel
 }
 
 func NewModel(db *sql.DB, gmaps *maps.Client) Models {
 	return Models{
-		User: UserModel{DB: db},
+		User:   UserModel{DB: db},
+		Report: ReportModel{DB: db},
 		Map: MapModel{
 			DB:    db,
 			GMaps: gmaps,
