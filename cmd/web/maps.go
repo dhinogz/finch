@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -54,4 +55,14 @@ func (app *application) handleNewMap(w http.ResponseWriter, r *http.Request) {
 	data.Route = route
 	data.MapsAPI = app.config.gmaps.apiKey
 	app.renderPage(w, http.StatusOK, "new-map.html", data)
+}
+
+func (app *application) handleRoute(w http.ResponseWriter, r *http.Request) {
+	places, err := app.models.Map.CalcRoute()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	fmt.Fprint(w, places)
+
 }

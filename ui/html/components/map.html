@@ -103,7 +103,18 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
-                    travelMode: 'DRIVING'
+                    // waypoints: [
+                    // {
+                    // location: 'Avenida Junco de la Vega',
+                    // stopover: false
+                    // },{
+                    // location: 'Avenida Luis Elizondo',
+                    // stopover: false
+                    // },{
+                    // location: 'Calle Río Nazas',
+                    // stopover: false 
+                    // }],
+                    travelMode: 'DRIVING',
                 }, function(response, status) {
                     if (status === 'OK') {
                         directionsRenderer.setDirections(response);

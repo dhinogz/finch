@@ -3,7 +3,12 @@ package data
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 
+	"github.com/dhinogz/finch/pkg/flexpolyline"
 	"googlemaps.github.io/maps"
 )
 
@@ -23,18 +28,26 @@ type MapModel struct {
 	GMaps *maps.Client
 }
 
+type RouteResponse struct {
+	Routes []struct {
+		Sections []struct {
+			Polyline string `json:"polyline"`
+		} `json:"sections"`
+	} `json:"routes"`
+}
+
 func (mm *MapModel) GetDefaultRoute() (*Route, error) {
 
 	route := &Route{
 		Start: Place{
-			Name: "San Francisco",
-			Lat:  37.7749,
-			Lng:  -122.4194,
+			Name: "Berlin1",
+			Lat:  52.522297,
+			Lng:  13.353296,
 		},
 		End: Place{
-			Name: "Los Angeles",
-			Lat:  34.0522,
-			Lng:  -118.2437,
+			Name: "Berlin2",
+			Lat:  52.508309,
+			Lng:  13.355633,
 		},
 	}
 
@@ -91,4 +104,93 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func (mm *MapModel) CalcRoute() (*[]Place, error) {
+	apiKey := "6v2fXdPA23DAqav7sAqa8JRo7xfi-KlV6hySAwOkKbM"
+
+	// generate box to avoid
+	//avoidPoint := Place{Lat: 52.51061, Lng: 13.37588}
+	//box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
+	//box2 := Place{Lat: avoidPoint.Lat - 0.00300, Lng: avoidPoint.Lng + 0.00300}
+
+	//avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+
+	//avoid := "[areas]=" + avoidBox
+
+	origin := "52.522297,13.353296"
+	destination := "52.508309,13.355633"
+	//avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
+	avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
+	apiUrl := "https://router.hereapi.com/v8/routes?" +
+		"origin=" + origin +
+		"&destination=" + destination +
+		"&transportMode=car" +
+		"&avoid" + avoid +
+		"&return=polyline" +
+		"&apikey=" + apiKey
+	fmt.Println(apiUrl)
+
+	response, err := http.Get(apiUrl)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	responseBody, err := io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("Error reading response:", err)
+		return nil, err
+	}
+
+	var routeResponse RouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		fmt.Println("Error parsing JSON response:", err)
+		return nil, err
+	}
+
+	var polyline string
+	for _, route := range routeResponse.Routes {
+		for _, section := range route.Sections {
+			fmt.Println("Polyline:", section.Polyline)
+			polyline = section.Polyline
+		}
+	}
+
+	dec, error := flexpolyline.Decode(polyline)
+	if error != nil {
+		fmt.Println("Error decoding polyline:", error)
+		return nil, err
+	}
+	var places []Place
+	// get the lat and lng values from dec.Coordinates() and place in a matrix
+	// define a counter for the for loop
+	var c, skip, i int
+	for c < len(dec.Coordinates()) {
+		skip = (len(dec.Coordinates()) / 25) + 1
+		// check if skip is divisible by 25
+		if skip <= 1 {
+			c += 1
+		} else {
+			c += skip
+		}
+		if c >= len(dec.Coordinates()) {
+			break
+		}
+		i += 1
+		p := Place{Lat: dec.Coordinates()[c].Lat, Lng: dec.Coordinates()[c].Lng}
+		places = append(places, p)
+	}
+
+	// for loop to print all of places
+	for _, place := range places {
+		// print type of place
+		fmt.Println(place)
+
+	}
+
+	return &places, nil
+
 }
