@@ -107,29 +107,40 @@ func min(a, b int) int {
 	return b
 }
 
-func getBox(avoid []*Place) string {
-	return ""
+func getBox(avoid []Place) string {
+	// &avoid[areas]=polygon:34.07508,-117.94758;33.89025,-117.73334;33.89759,-118.14015|polygon:54.073334,-118.027496;53.888504,-117.813255;53.895847,-118.22007
+	// for loop for every place in avoid
+	var avoidBox string
+	for _, place := range avoid {
+		box1 := Place{Lat: place.Lat + 0.00300, Lng: place.Lng - 0.00300}
+		box2 := Place{Lat: place.Lat - 0.00300, Lng: place.Lng + 0.00300}
+		avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+		// print avoidBox
+		fmt.Println(avoidBox)
+	}
+	return avoidBox
 }
 
 func (mm *MapModel) CalcRoute() (*Route, error) {
 	apiKey := "6v2fXdPA23DAqav7sAqa8JRo7xfi-KlV6hySAwOkKbM"
 
 	// generate box to avoid
-	//avoidPoint := Place{Lat: 52.51061, Lng: 13.37588}
-	// box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
-	//box2 := Place{Lat: avoidPoint.Lat - 0.00300, Lng: avoidPoint.Lng + 0.00300}
 
 	// TODO: implement this!!!
 	// avoid, err := mm.GetDangerousArea()
 	// if err != nil {
 	// 	return nil, err
 	// }
+	avoid := []Place{
+		{
+			Lat: 52.51061,
+			Lng: 13.37588,
+		},
+	}
 
-	// box := getBox(avoid)
+	box := getBox(avoid)
 
-	// avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
-
-	//avoid := "[areas]=" + avoidBox
+	//avoid := "[areas]=" + box
 
 	originStr := "52.522297,13.353296"
 	destinationStr := "52.508309,13.355633"
@@ -145,16 +156,17 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 		Start: start,
 		End:   destination,
 	}
-	avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
+	avoidStr := "[areas]=" + box
 	// avoidStr := fmt.Sprintf("[areas]=bbox:%s", avoid)
 	apiUrl := "https://router.hereapi.com/v8/routes?" +
 		"origin=" + originStr +
 		"&destination=" + destinationStr +
 		"&transportMode=car" +
-		"&avoid" + avoid +
+		"&avoid" + avoidStr +
 		"&return=polyline" +
 		"&apikey=" + apiKey
 
+	fmt.Println(apiUrl)
 	response, err := http.Get(apiUrl)
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -193,7 +205,7 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 	// define a counter for the for loop
 	var c, skip, i int
 	for c < len(dec.Coordinates()) {
-		skip = (len(dec.Coordinates()) / 25) + 1
+		skip = (len(dec.Coordinates()) / 12) + 1
 		// check if skip is divisible by 25
 		if skip <= 1 {
 			c += 1
