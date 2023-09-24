@@ -103,124 +103,14 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
-                waypoints: [
-                        
+                    waypoints: [
+                        {{range .Waypoints}}
                             {
-                                location: "52.52205000000001,13.348550000000001",
+                                location: "{{.Lat}},{{.Lng}}",
                                 stopover: false
                             },
-                        
-                            {
-                                location: "52.52059000000001,13.34225",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.51946000000001,13.34038",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.51952000000001,13.33828",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.5215,13.33356",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.522650000000006,13.329320000000001",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.52108000000001,13.327900000000005",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.517370000000014,13.324910000000006",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.51545000000001,13.327050000000007",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.51352000000001,13.330120000000008",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.51230000000001,13.331040000000007",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50955000000001,13.329290000000007",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50663000000001,13.331240000000008",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50544000000002,13.333930000000006",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.505090000000024,13.337120000000004",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50524000000003,13.339210000000005",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.505180000000024,13.340650000000004",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50576000000002,13.34169",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50678000000003,13.346670000000001",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50765000000003,13.348770000000002",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50900000000003,13.349690000000002",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50959000000003,13.352410000000003",
-                                stopover: false
-                            },
-                        
-                            {
-                                location: "52.50986000000004,13.356490000000004",
-                                stopover: false
-                            },
-                        
-                    ],
+                        {{end}}
+                    ],
                     travelMode: 'DRIVING',
                 }, function(response, status) {
                     if (status === 'OK') {

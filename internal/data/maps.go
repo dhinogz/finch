@@ -166,6 +166,7 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 		"&return=polyline" +
 		"&apikey=" + apiKey
 
+	fmt.Println(apiUrl)
 	response, err := http.Get(apiUrl)
 	if err != nil {
 		fmt.Println("Error:", err)
