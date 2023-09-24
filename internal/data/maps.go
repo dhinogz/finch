@@ -40,14 +40,14 @@ func (mm *MapModel) GetDefaultRoute() (*Route, error) {
 
 	route := &Route{
 		Start: Place{
-			Name: "Teconologico de Monterrey",
-			Lat:  25.650711,
-			Lng:  -100.289449,
+			Name: "Berlin1",
+			Lat:  52.522297,
+			Lng:  13.353296,
 		},
 		End: Place{
-			Name: "Casita de la abuela",
-			Lat:  25.636026,
-			Lng:  -100.315968,
+			Name: "Berlin2",
+			Lat:  52.508309,
+			Lng:  13.355633,
 		},
 	}
 
@@ -114,11 +114,12 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 	// 	"&waypoint0=geo!52.5,13.4" +
 	// 	"&waypoint1=geo!52.5,13.45" +
 	// 	"&mode=fastest;car;traffic:disabled"
+	//avoidBox := "13.37588,52.51061,13.34226,52.51892"
 
-	origin := "25.650711,-100.289449"
-	destination := "25.636026,-100.315968"
+	origin := "52.522297,13.353296"
+	destination := "52.508309,13.355633"
 	//avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
-	avoid := "[areas]=bbox:25.640095,-100.312389,25.654603,-100.289249"
+	avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
 	apiUrl := "https://router.hereapi.com/v8/routes?" +
 		"origin=" + origin +
 		"&destination=" + destination +
@@ -161,8 +162,6 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 		fmt.Println("Error decoding polyline:", error)
 		return nil, err
 	}
-	//fmt.Println(dec)
-	//dec.Coordinates()
 	var places []Place
 	// get the lat and lng values from dec.Coordinates() and place in a matrix
 	// define a counter for the for loop
@@ -179,16 +178,9 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 			break
 		}
 		i += 1
-		// print type of lat and lng
 		p := Place{Lat: dec.Coordinates()[c].Lat, Lng: dec.Coordinates()[c].Lng}
 		places = append(places, p)
-		//print length of places
 	}
-	// for _, point := range dec.Coordinates() {
-	// 	matrix = append(matrix, []float64{point.Lat, point.Lng})
-	// 	// PRINT LAT AND LNG
-	// 	fmt.Println(point.Lat, point.Lng)
-	// }
 
 	// for loop to print all of places
 	for _, place := range places {
