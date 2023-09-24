@@ -39,6 +39,7 @@
     <script src="/static/js/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script id="script-map">
+        let map, marker;
         function initMap() {
                 var heatmapData = [
                     {{range.HeatmapPoints}}
@@ -97,6 +98,24 @@
             //         }
             //     });
             // {{end}}
+            marker = new google.maps.Marker({map});
+
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                
+                marker.setPosition(pos);
+                map.setCenter(pos);
+                localStorage["currentLat"] = pos.lat;
+                localStorage["currentLng"] = pos.lng;
+            },
+    
+            )};
+
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{.MapsAPI}}&callback=initMap" async defer></script>

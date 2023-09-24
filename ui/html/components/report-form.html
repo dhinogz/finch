@@ -11,12 +11,22 @@
       <label for="report-description" class="block mb-2">Report Description:</label>
       <input class="input input-bordered w-full" type='text' name='report-description' id='report-description'>        
     </div>
-
+    
+    <div>
+      <input type='hidden' name='report-location' id='report-location' value=''>       
+    </div>
     <div>
       <input class="btn btn-primary" type='submit' value='Report'>
     </div>
     
   </form>
 </div>
+
+  <script>
+    var locLat = localStorage.getItem("currentLat")
+    var locLng = localStorage.getItem("currentLng")
+    var pos = [locLat, locLng]
+    document.getElementById('report-location').value = locationValue;
+      </script> 
 
 {{end}}

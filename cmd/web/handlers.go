@@ -12,6 +12,7 @@ func (app *application) handleHealth(w http.ResponseWriter, r *http.Request) {
 type reportCreateForm struct {
 	Type        string `form:"report-type"`
 	Description string `form:"report-description"`
+	Location    string `form:"report-location"`
 }
 
 func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +30,7 @@ func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = app.models.Report.Insert(1, form.Type, form.Description)
+	err = app.models.Report.Insert(form.Location, 1, form.Type, form.Description)
 	fmt.Println(err)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
