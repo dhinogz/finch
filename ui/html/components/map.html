@@ -11,6 +11,9 @@
                 var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 10,
                     center: origin,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
                     styles: [
                     { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
                     { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
