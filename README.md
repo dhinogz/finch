@@ -1,5 +1,5 @@
 # Finch
-[[logo.jpg]]
+![logo](https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/002/601/618/datas/original.png)
 
 ## Inspiration
 Tourists and travelers find themselves in potentially dangerous situations due to a lack of information. It's a scenario we've all heard of, and it's one we're dedicated to changing. Specifically the 2015 Waze app case in Brazil, where a group of tourists ended up in a favela being tragically killed. 
