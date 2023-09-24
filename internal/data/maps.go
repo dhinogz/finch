@@ -111,12 +111,20 @@ func getBox(avoid []Place) string {
 	// &avoid[areas]=polygon:34.07508,-117.94758;33.89025,-117.73334;33.89759,-118.14015|polygon:54.073334,-118.027496;53.888504,-117.813255;53.895847,-118.22007
 	// for loop for every place in avoid
 	var avoidBox string
-	for _, place := range avoid {
-		box1 := Place{Lat: place.Lat + 0.00300, Lng: place.Lng - 0.00300}
-		box2 := Place{Lat: place.Lat - 0.00300, Lng: place.Lng + 0.00300}
+
+	//check if avoid has only one place
+	if len(avoid) == 1 {
+		box1 := Place{Lat: avoid[0].Lat + 0.00300, Lng: avoid[0].Lng - 0.00300}
+		box2 := Place{Lat: avoid[0].Lat - 0.00300, Lng: avoid[0].Lng + 0.00300}
 		avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
-		// print avoidBox
-		fmt.Println(avoidBox)
+	} else {
+		for _, place := range avoid {
+			box1 := Place{Lat: place.Lat + 0.00300, Lng: place.Lng - 0.00300}
+			box2 := Place{Lat: place.Lat - 0.00300, Lng: place.Lng + 0.00300}
+			avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+			// print avoidBox
+			fmt.Println(avoidBox)
+		}
 	}
 	return avoidBox
 }
@@ -133,8 +141,8 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 	// }
 	avoid := []Place{
 		{
-			Lat: 52.51061,
-			Lng: 13.37588,
+			Lat: 52.514706,
+			Lng: 13.369239,
 		},
 	}
 
@@ -205,7 +213,7 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 	// define a counter for the for loop
 	var c, skip, i int
 	for c < len(dec.Coordinates()) {
-		skip = (len(dec.Coordinates()) / 12) + 1
+		skip = (len(dec.Coordinates()) / 6) + 1
 		// check if skip is divisible by 25
 		if skip <= 1 {
 			c += 1
