@@ -7,9 +7,11 @@ import (
 
 func (app *application) handleMap(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
-	route, err := app.models.Map.GetDefaultRoute()
+
+	route, err := app.models.Map.CalcRoute()
 	if err != nil {
 		app.serverError(w, err)
+		return
 	}
 
 	heatmapPoints, err := app.models.Map.GetDangerousArea()
