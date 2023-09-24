@@ -28,15 +28,11 @@ func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(form.Location)
 	err = app.models.Report.Insert(form.Location, 1)
-	fmt.Println(err)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (app *application) handleReportForm(w http.ResponseWriter, r *http.Request) {

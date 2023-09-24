@@ -1,5 +1,5 @@
 {{define "report-form"}}
-  <form action='/report' method='POST'>
+  <form hx-post='/report' hx-swap="none">
     <div>
       <input type='hidden' name='report-location' id='report-location' value=''>       
     </div>
