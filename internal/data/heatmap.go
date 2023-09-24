@@ -2,8 +2,7 @@ package data
 
 func (mm *MapModel) GetDangerousArea() ([]*Place, error) {
 	stmt := `SELECT l.lat, l.lng
-		FROM dangerous_area d
-		JOIN location_points l ON l.id = d.location_id;
+		FROM location_points l
 	`
 
 	rows, err := mm.DB.Query(stmt)
