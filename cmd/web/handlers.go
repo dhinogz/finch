@@ -10,9 +10,7 @@ func (app *application) handleHealth(w http.ResponseWriter, r *http.Request) {
 }
 
 type reportCreateForm struct {
-	Type        string `form:"report-type"`
-	Description string `form:"report-description"`
-	Location    string `form:"report-location"`
+	Location string `form:"report-location"`
 }
 
 func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +28,8 @@ func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = app.models.Report.Insert(form.Location, 1, form.Type, form.Description)
+	fmt.Println(form.Location)
+	err = app.models.Report.Insert(form.Location, 1)
 	fmt.Println(err)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
@@ -38,5 +37,9 @@ func (app *application) handleReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
 
+func (app *application) handleReportForm(w http.ResponseWriter, r *http.Request) {
+	data := app.newTemplateData(r)
+	app.renderPage(w, http.StatusOK, "report.html", data)
 }
