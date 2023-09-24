@@ -9,11 +9,12 @@ import (
 )
 
 type templateData struct {
-	CurrentDate  time.Time
-	Form         any
-	Route        *data.Route
-	MapsAPI      string
-	Autocomplete []string
+	CurrentDate   time.Time
+	Form          any
+	Route         *data.Route
+	HeatmapPoints []*data.Place
+	MapsAPI       string
+	Autocomplete  []string
 }
 
 func humanDate(t time.Time) string {

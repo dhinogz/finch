@@ -12,8 +12,15 @@ func (app *application) handleMap(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err)
 	}
+
+	heatmapPoints, err := app.models.Map.GetDangerousArea()
+	if err != nil {
+		app.serverError(w, err)
+	}
+
 	data.Route = route
 	data.MapsAPI = app.config.gmaps.apiKey
+	data.HeatmapPoints = heatmapPoints
 	app.renderPage(w, http.StatusOK, "home.html", data)
 }
 

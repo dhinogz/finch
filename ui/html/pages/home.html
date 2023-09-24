@@ -1,17 +1,7 @@
 {{template "header" .}}
 
-<div class="flex flex-wrap">
-    <div class="w-full lg:w-1/2 p-4">
-        {{template "place-form" .}}
-    </div>
-    <div class="w-full h-full lg:w-1/2 p-12">
-        <div id="route" class="pb-4">
-            {{with .Route}}
-                {{.Start.Name}} to {{.End.Name}}
-            {{end}}
-        </div>
-        {{template "map-render" .}}
-    </div>
+<div class="absolute inset-0  h-full w-full z-0">
+    {{template "map-render" .}}
 </div>
 
-{{template "footer-map" .}}
+{{template "footer-map-heatmap" .}}
