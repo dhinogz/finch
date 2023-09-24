@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,6 +25,19 @@ type Place struct {
 type MapModel struct {
 	DB    *sql.DB
 	GMaps *maps.Client
+}
+
+type RouteResponse struct {
+	Routes []struct {
+		Sections []struct {
+			Spans []struct {
+				Names []struct {
+					Value string `json:"value"`
+				} `json:"names"`
+				MaxSpeed float64 `json:"maxSpeed"`
+			} `json:"spans"`
+		} `json:"sections"`
+	} `json:"routes"`
 }
 
 func (mm *MapModel) GetDefaultRoute() (*Route, error) {
@@ -131,8 +145,27 @@ func (mm *MapModel) CalcRoute() {
 		fmt.Println("Error reading response:", err)
 		return
 	}
-	// print the type of the response body
-	fmt.Printf("%T\n", responseBody)
+
 	fmt.Println(string(responseBody))
+
+	var routeResponse RouteResponse
+	err = json.Unmarshal(responseBody, &routeResponse)
+	if err != nil {
+		fmt.Println("Error parsing JSON response:", err)
+		return
+	}
+
+	var streetNames []string
+
+	for _, route := range routeResponse.Routes {
+		for _, section := range route.Sections {
+			for _, span := range section.Spans {
+				for _, name := range span.Names {
+					fmt.Println("Street Name:", name.Value)
+					streetNames = append(streetNames, name.Value)
+				}
+			}
+		}
+	}
 
 }
