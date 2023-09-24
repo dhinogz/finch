@@ -1,17 +1,41 @@
 {{define "place-form"}}
-<div class="z-20">
+<div class="p-8 rounded-lg w-96">
+  <h2 class="text-2xl mb-4">Generate a route</h2>
   <form action='/route'method='POST'>
-      <div class="flex flex-row w-full z-20">
-        <div class="form-control z-20">
-          <input type="text" placeholder="Search" class="input input-bordered w-full" />
+    <div class="flex mb-4">
+    
+      <div class="relative flex-grow">
+        <input class="input input-bordered w-full" type='text' name='place'
+          hx-get="/autocomplete"
+          hx-trigger="keyup changed delay:500ms"
+          hx-target="#search-results-start"
+          placeholder="Starting point..."
+        >        
+        <div id="search-results-start" 
+          class="absolute z-10 w-full mt-1 bg-white shadow-lg border border-gray-300 rounded-md">
         </div>
-        <button class="btn border-transparent" type='submit' value='Search'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" class="w-8 h-8">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          
-        </button>
       </div>
+      <div class="mx-4 my-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+
+      <div class="relative flex-grow">
+        <input class="input input-bordered w-full" type='text' name='place'
+          hx-get="/autocomplete"
+          hx-trigger="keyup changed delay:500ms"
+          hx-target="#search-results-destination"
+          placeholder="Destination..."
+        >        
+        <div id="search-results-destination" 
+          class="absolute z-10 w-full mt-1 bg-white shadow-lg border border-gray-300 rounded-md">
+        </div>
+      </div>
+    </div>
+    <div>
+      <input class="btn btn-primary" type='submit' value='Search'>
+    </div>
   </form>
 </div>
 {{end}}

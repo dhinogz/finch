@@ -22,7 +22,11 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodPost, "/route", dynamic.ThenFunc(app.handleNewMap))
 	router.Handler(http.MethodGet, "/autocomplete", dynamic.ThenFunc(app.handleAutocomplete))
 
+
 	router.Handler(http.MethodGet, "/wapapau", dynamic.ThenFunc(app.handleRoute))
+
+	router.Handler(http.MethodPost, "/report", dynamic.ThenFunc(app.handleReport))
+
 
 	router.Handler(http.MethodGet, "/me", dynamic.ThenFunc(app.handleCurrentUserProfile))
 
