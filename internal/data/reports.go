@@ -2,8 +2,6 @@ package data
 
 import (
 	"database/sql"
-	"strconv"
-	"strings"
 )
 
 type Report struct {
@@ -16,16 +14,15 @@ type ReportModel struct {
 	DB *sql.DB
 }
 
-func (rm *ReportModel) Insert(location string, user_id int, reportType string, description string) error {
-
+func (rm *ReportModel) Insert(location string, user_id int) error {
 	locstmt := `
 		INSERT INTO location_points (lat, lng)
-		VALUES ($1, $2);
+		VALUES (52.31, 53.32);
 	`
-	parts := strings.Split(location, ",")
-	latitude, _ := strconv.ParseFloat(parts[0], 64)
-	longitude, _ := strconv.ParseFloat(parts[1], 64)
-	_, err := rm.DB.Exec(locstmt, latitude, longitude)
+	// parts := strings.Split(location, ",")
+	// latitude, _ := strconv.ParseFloat(parts[0], 64)
+	// longitude, _ := strconv.ParseFloat(parts[1], 64)
+	_, err := rm.DB.Exec(locstmt)
 	if err != nil {
 		return err
 	}
@@ -34,7 +31,7 @@ func (rm *ReportModel) Insert(location string, user_id int, reportType string, d
 		INSERT INTO reports (user_id, report_type, report_description)
 		VALUES ($1, $2, $3) RETURNING id
 	`
-	_, err = rm.DB.Exec(stmt, user_id, reportType, description)
+	_, err = rm.DB.Exec(stmt, user_id, "bang", "bangarang")
 	if err != nil {
 		return err
 	}
