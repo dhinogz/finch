@@ -18,16 +18,13 @@ func (app *application) routes() http.Handler {
 	dynamic := alice.New(app.sessionManager.LoadAndSave)
 
 	router.Handler(http.MethodGet, "/health", dynamic.ThenFunc(app.handleHealth))
-	router.Handler(http.MethodGet, "/", dynamic.ThenFunc(app.handleMap))
-	router.Handler(http.MethodPost, "/route", dynamic.ThenFunc(app.handleNewMap))
-	router.Handler(http.MethodGet, "/autocomplete", dynamic.ThenFunc(app.handleAutocomplete))
 
-	router.Handler(http.MethodGet, "/wapapau", dynamic.ThenFunc(app.handleRoute))
+	router.Handler(http.MethodGet, "/", dynamic.ThenFunc(app.handleMap))
+	router.Handler(http.MethodPost, "/search", dynamic.ThenFunc(app.handleNewMap))
+	router.Handler(http.MethodGet, "/autocomplete", dynamic.ThenFunc(app.handleAutocomplete))
 
 	router.Handler(http.MethodPost, "/report", dynamic.ThenFunc(app.handleReport))
 	router.Handler(http.MethodGet, "/report", dynamic.ThenFunc(app.handleReportForm))
-
-	router.Handler(http.MethodGet, "/me", dynamic.ThenFunc(app.handleCurrentUserProfile))
 
 	router.Handler(http.MethodGet, "/user/signup", dynamic.ThenFunc(app.handleUserSignup))
 	router.Handler(http.MethodPost, "/user/signup", dynamic.ThenFunc(app.handleUserSignupPost))

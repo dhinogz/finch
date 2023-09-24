@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/dhinogz/finch/internal/helpers"
 	"github.com/dhinogz/finch/pkg/flexpolyline"
 	"googlemaps.github.io/maps"
 )
@@ -55,7 +56,19 @@ func (mm *MapModel) GetDefaultRoute() (*Route, error) {
 	return route, nil
 }
 
-func (mm *MapModel) GetRoute(ctx context.Context, start, destination string) (*Route, error) {
+func (mm *MapModel) GetRoute(ctx context.Context, start, destination, apiKey string, lat, lng float64) (*Route, error) {
+	// d, err := helpers.FindPlaceFromText(destination, apiKey)
+	lat = 25.6866
+	lng = -100.3161
+	d, err := helpers.NearbySearch(destination, apiKey, lat, lng, 10000)
+	if err != nil {
+		return nil, err
+	}
+
+	latT := d.Results[0].Geometry.Location.Lat
+	lngT := d.Results[0].Geometry.Location.Lng
+
+	fmt.Println(lat, lng)
 
 	route := &Route{
 		Start: Place{
@@ -64,9 +77,9 @@ func (mm *MapModel) GetRoute(ctx context.Context, start, destination string) (*R
 			Lng:  -100.3161,
 		},
 		End: Place{
-			Name: "Saltillo, Coahuila",
-			Lat:  25.4383,
-			Lng:  -100.9737,
+			Name: d.Results[0].Name,
+			Lat:  latT,
+			Lng:  lngT,
 		},
 	}
 

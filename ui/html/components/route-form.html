@@ -1,9 +1,9 @@
 {{define "place-form"}}
 <div class="z-20">
-  <form action='/route'method='POST'>
+  <form hx-post='/search' hx-target="#script-map" hx-swap="outerHTML">
       <div class="flex flex-row w-full z-20">
         <div class="form-control z-20">
-          <input type="text" placeholder="Search" class="input input-bordered w-full" />
+          <input type="text" placeholder="Search" class="input input-bordered w-full" id="query" name="query"/>
         </div>
         <button class="btn border-transparent" type='submit' value='Search'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" class="w-8 h-8">
