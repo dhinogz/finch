@@ -2,6 +2,8 @@ package data
 
 import (
 	"database/sql"
+	"strconv"
+	"strings"
 )
 
 type Report struct {
@@ -17,12 +19,12 @@ type ReportModel struct {
 func (rm *ReportModel) Insert(location string, user_id int) error {
 	locstmt := `
 		INSERT INTO location_points (lat, lng)
-		VALUES (52.31, 53.32);
+		VALUES ($1, $2);
 	`
-	// parts := strings.Split(location, ",")
-	// latitude, _ := strconv.ParseFloat(parts[0], 64)
-	// longitude, _ := strconv.ParseFloat(parts[1], 64)
-	_, err := rm.DB.Exec(locstmt)
+	parts := strings.Split(location, ",")
+	latitude, _ := strconv.ParseFloat(parts[0], 64)
+	longitude, _ := strconv.ParseFloat(parts[1], 64)
+	_, err := rm.DB.Exec(locstmt, latitude, longitude)
 	if err != nil {
 		return err
 	}
