@@ -31,12 +31,7 @@ type MapModel struct {
 type RouteResponse struct {
 	Routes []struct {
 		Sections []struct {
-			Spans []struct {
-				Names []struct {
-					Value string `json:"value"`
-				} `json:"names"`
-				MaxSpeed float64 `json:"maxSpeed"`
-			} `json:"spans"`
+			Polyline string `json:"polyline"`
 		} `json:"sections"`
 	} `json:"routes"`
 }
@@ -111,7 +106,7 @@ func min(a, b int) int {
 	return b
 }
 
-func (mm *MapModel) CalcRoute() {
+func (mm *MapModel) CalcRoute() (*[]Place, error) {
 	apiKey := "6v2fXdPA23DAqav7sAqa8JRo7xfi-KlV6hySAwOkKbM"
 
 	// apiUrl := "https://route.ls.hereapi.com/routing/7.2/calculateroute.json" +
@@ -129,7 +124,6 @@ func (mm *MapModel) CalcRoute() {
 		"&destination=" + destination +
 		"&transportMode=car" +
 		"&avoid" + avoid +
-		"&spans=maxSpeed,names" +
 		"&return=polyline" +
 		"&apikey=" + apiKey
 	fmt.Println(apiUrl)
@@ -137,41 +131,72 @@ func (mm *MapModel) CalcRoute() {
 	response, err := http.Get(apiUrl)
 	if err != nil {
 		fmt.Println("Error:", err)
-		return
+		return nil, err
 	}
 	defer response.Body.Close()
 
 	responseBody, err := io.ReadAll(response.Body)
 	if err != nil {
 		fmt.Println("Error reading response:", err)
-		return
+		return nil, err
 	}
-
-	fmt.Println(string(responseBody))
 
 	var routeResponse RouteResponse
 	err = json.Unmarshal(responseBody, &routeResponse)
 	if err != nil {
 		fmt.Println("Error parsing JSON response:", err)
-		return
+		return nil, err
 	}
-	var streetNames []string
-	dec, error := flexpolyline.Decode("BG45z9wB_-gp_FzF8GzKwMvMgPrEzFnVjcnG3I3S_YvM7Q7QvWvM7QvHnLrYnfjIrJzZriB7LrOjDrErEzF3DzFrE7GrEzF7G3IzKrO7G_J7Q7VzZjhB7QvW3mBj1BnGrJnLnQ7BrE7BnG3DzKzKvgBrT3_BnB_E7Qn4B_O_2B3DzK_E3InGrJjNrTjIzPrJvR7BjXnBjS7BrOjDnavC3SvH74BvC7LjD7L3D3IrEvH_JrJjIvMjD3IvCjN_EzevH3IjD_ET3DnBvCnGzKvRvgBnQzU7Q3S_EzFrJzKvCjDrT7VjIrJjSnVnVrYjS_TvCvCnVrd7G_JvRrY7BnGjDzF7Q3X_E7GnLzPjIjNnGzKnGrJ3IzP_JzP7BvC7GrEvHzKvH_JjDrEzK_O8V_iBoQ7agKrO4X7pBTnGUzFwC3N4D_EsEzFwHrJoGjIoG3IkI7LwHnLkIvMwH7LsiBr2BoV3hBkIvM0F3IsEvHsJrOgKrY8V7kBgFjI8GvW4D_JA_JnGnG_JrJjI3I7GjI_OvW7G_JnG3IrEnGrJrOvMvR_EjIrE7G3DvHjDvH4IvH8LnLwWvRA3DvC7G3DTvWwR7V8QvHgFrE4DzF0FvR8Q_JgKjIsJ3IoL_E8G7BwC_JgP_JgPjDsEvH0KjIkNrJsT7GgPrJoa3IwW3D0KjD4InG8QzFwMrEsJToBnGgK3DrE3NzF_Y_ErJT")
-	if error != nil {
-		fmt.Println("Error decoding polyline:", error)
-		return
-	}
-	fmt.Println(dec)
 
+	var polyline string
 	for _, route := range routeResponse.Routes {
 		for _, section := range route.Sections {
-			for _, span := range section.Spans {
-				for _, name := range span.Names {
-					fmt.Println(name.Value)
-					streetNames = append(streetNames, name.Value)
-				}
-			}
+			fmt.Println("Polyline:", section.Polyline)
+			polyline = section.Polyline
 		}
 	}
+
+	dec, error := flexpolyline.Decode(polyline)
+	if error != nil {
+		fmt.Println("Error decoding polyline:", error)
+		return nil, err
+	}
+	//fmt.Println(dec)
+	//dec.Coordinates()
+	var places []Place
+	// get the lat and lng values from dec.Coordinates() and place in a matrix
+	// define a counter for the for loop
+	var c, skip, i int
+	for c < len(dec.Coordinates()) {
+		skip = (len(dec.Coordinates()) / 25) + 1
+		// check if skip is divisible by 25
+		if skip <= 1 {
+			c += 1
+		} else {
+			c += skip
+		}
+		if c >= len(dec.Coordinates()) {
+			break
+		}
+		i += 1
+		// print type of lat and lng
+		p := Place{Lat: dec.Coordinates()[c].Lat, Lng: dec.Coordinates()[c].Lng}
+		places = append(places, p)
+		//print length of places
+	}
+	// for _, point := range dec.Coordinates() {
+	// 	matrix = append(matrix, []float64{point.Lat, point.Lng})
+	// 	// PRINT LAT AND LNG
+	// 	fmt.Println(point.Lat, point.Lng)
+	// }
+
+	// for loop to print all of places
+	for _, place := range places {
+		// print type of place
+		fmt.Println(place)
+
+	}
+
+	return &places, nil
 
 }

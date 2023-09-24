@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 )
 
@@ -50,5 +51,11 @@ func (app *application) handleNewMap(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) handleRoute(w http.ResponseWriter, r *http.Request) {
-	app.models.Map.CalcRoute()
+	places, err := app.models.Map.CalcRoute()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	fmt.Fprint(w, places)
+
 }
