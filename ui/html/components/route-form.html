@@ -5,6 +5,9 @@
         <div class="form-control z-20">
           <input type="text" placeholder="Search" class="input input-bordered w-full" id="query" name="query"/>
         </div>
+        <div>
+          <input type='hidden' name='user-location' id='user-location' value=''>       
+        </div>
         <button class="btn border-transparent" type='submit' value='Search'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" class="w-8 h-8">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -14,4 +17,11 @@
       </div>
   </form>
 </div>
+
+<script>
+  var locLat = localStorage.getItem("currentLat")
+  var locLng = localStorage.getItem("currentLng")
+  var pos = [locLat, locLng]
+  document.getElementById('user-location').value = pos; 
+</script> 
 {{end}}
