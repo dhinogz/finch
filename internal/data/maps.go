@@ -109,15 +109,14 @@ func min(a, b int) int {
 func (mm *MapModel) CalcRoute() (*[]Place, error) {
 	apiKey := "6v2fXdPA23DAqav7sAqa8JRo7xfi-KlV6hySAwOkKbM"
 
-	// apiUrl := "https://route.ls.hereapi.com/routing/7.2/calculateroute.json" +
-	// 	"?apiKey=" + apiKey +
-	// 	"&waypoint0=geo!52.5,13.4" +
-	// 	"&waypoint1=geo!52.5,13.45" +
-	// 	"&mode=fastest;car;traffic:disabled"
-	avoidBox := "13.37588,52.51061,13.34226,52.51892"
-	avoidPoint := Place{Lat: 52.51061, Lng: 13.37588}
-	box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
-	box2 := Place{Lat: avoidPoint.Lat - 0.00300, Lng: avoidPoint.Lng + 0.00300}
+	// generate box to avoid
+	//avoidPoint := Place{Lat: 52.51061, Lng: 13.37588}
+	//box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
+	//box2 := Place{Lat: avoidPoint.Lat - 0.00300, Lng: avoidPoint.Lng + 0.00300}
+
+	//avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+
+	//avoid := "[areas]=" + avoidBox
 
 	origin := "52.522297,13.353296"
 	destination := "52.508309,13.355633"
