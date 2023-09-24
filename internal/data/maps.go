@@ -13,8 +13,9 @@ import (
 )
 
 type Route struct {
-	Start Place
-	End   Place
+	Start     Place
+	End       Place
+	Waypoints []Place
 }
 
 type Place struct {
@@ -106,7 +107,7 @@ func min(a, b int) int {
 	return b
 }
 
-func (mm *MapModel) CalcRoute() (*[]Place, error) {
+func (mm *MapModel) CalcRoute() (*Route, error) {
 	apiKey := "6v2fXdPA23DAqav7sAqa8JRo7xfi-KlV6hySAwOkKbM"
 
 	// generate box to avoid
@@ -118,13 +119,25 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 
 	//avoid := "[areas]=" + avoidBox
 
-	origin := "52.522297,13.353296"
-	destination := "52.508309,13.355633"
+	originStr := "52.522297,13.353296"
+	destinationStr := "52.508309,13.355633"
+	start := Place{
+		Lat: 52.522297,
+		Lng: 13.353296,
+	}
+	destination := Place{
+		Lat: 52.508309,
+		Lng: 13.355633,
+	}
+	route := Route{
+		Start: start,
+		End:   destination,
+	}
 	//avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
 	avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
 	apiUrl := "https://router.hereapi.com/v8/routes?" +
-		"origin=" + origin +
-		"&destination=" + destination +
+		"origin=" + originStr +
+		"&destination=" + destinationStr +
 		"&transportMode=car" +
 		"&avoid" + avoid +
 		"&return=polyline" +
@@ -164,7 +177,7 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 		fmt.Println("Error decoding polyline:", error)
 		return nil, err
 	}
-	var places []Place
+	var waypoints []Place
 	// get the lat and lng values from dec.Coordinates() and place in a matrix
 	// define a counter for the for loop
 	var c, skip, i int
@@ -181,16 +194,10 @@ func (mm *MapModel) CalcRoute() (*[]Place, error) {
 		}
 		i += 1
 		p := Place{Lat: dec.Coordinates()[c].Lat, Lng: dec.Coordinates()[c].Lng}
-		places = append(places, p)
+		waypoints = append(waypoints, p)
 	}
+	fmt.Println(len(waypoints))
+	route.Waypoints = waypoints
 
-	// for loop to print all of places
-	for _, place := range places {
-		// print type of place
-		fmt.Println(place)
-
-	}
-
-	return &places, nil
-
+	return &route, nil
 }
