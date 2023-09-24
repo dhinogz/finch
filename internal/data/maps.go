@@ -116,14 +116,16 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 
 	// generate box to avoid
 	//avoidPoint := Place{Lat: 52.51061, Lng: 13.37588}
-	//box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
+	// box1 := Place{Lat: avoidPoint.Lat + 0.00300, Lng: avoidPoint.Lng - 0.00300}
 	//box2 := Place{Lat: avoidPoint.Lat - 0.00300, Lng: avoidPoint.Lng + 0.00300}
-	avoid, err := mm.GetDangerousArea()
-	if err != nil {
-		return nil, err
-	}
 
-	box := getBox(avoid)
+	// TODO: implement this!!!
+	// avoid, err := mm.GetDangerousArea()
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// box := getBox(avoid)
 
 	// avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
 
@@ -143,13 +145,13 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 		Start: start,
 		End:   destination,
 	}
-	//avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
-	avoidStr := fmt.Sprintf("[areas]=bbox:%s", box)
+	avoid := "[areas]=bbox:13.37588,52.51061,13.34226,52.51892"
+	// avoidStr := fmt.Sprintf("[areas]=bbox:%s", avoid)
 	apiUrl := "https://router.hereapi.com/v8/routes?" +
 		"origin=" + originStr +
 		"&destination=" + destinationStr +
 		"&transportMode=car" +
-		"&avoid" + avoidStr +
+		"&avoid" + avoid +
 		"&return=polyline" +
 		"&apikey=" + apiKey
 
