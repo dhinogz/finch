@@ -1,4 +1,4 @@
-{{define "footer-map"}}
+{{define "footer-map-route"}}
 </body>
     <script src="/static/js/htmx.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -31,6 +31,78 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{.MapsAPI}}&callback=initMap" async defer></script>
+</html>
+{{end}}
+
+{{define "footer-map-heatmap"}}
+</body>
+    <script src="/static/js/htmx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script id="script-map">
+        function initMap() {
+                var heatmapData = [
+                    {{range.HeatmapPoints}}
+                        new google.maps.LatLng({{.Lat}}, {{.Lng}}),
+                    {{end}}
+                ];
+
+            var sanFrancisco = new google.maps.LatLng(37.774546, -122.433523);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: sanFrancisco,
+              zoom: 13,
+              mapTypeId: 'roadmap'
+            });
+
+            var heatmapOptions = {
+                data: heatmapData,
+                  dissipating: true,
+                gradient: [
+                    'rgba(255, 255, 255, 0)',
+                    'rgba(255, 165, 0, 1)', 
+                    'rgba(255, 140, 0, 1)', 
+                    'rgba(255, 100, 0, 1)',
+                    'rgba(255, 60, 0, 1)',
+                    'rgba(255, 0, 0, 1)'    
+                ],
+                  map: map,
+                  maxIntensity: 5,
+                  opacity: 0.6,
+                  radius: 20
+            };
+
+            var heatmap = new google.maps.visualization.HeatmapLayer(heatmapOptions);
+            heatmap.setMap(map);
+            // {{with .Route}}
+            //     var origin = {lat: {{.Start.Lat}}, lng: {{.Start.Lng}}};
+            //     var destination = {lat: {{.End.Lat}}, lng: {{.End.Lng}}};
+
+            //     var map = new google.maps.Map(document.getElementById('map'), {
+            //         zoom: 10,
+            //         center: origin
+            //     });
+
+            //     var directionsService = new google.maps.DirectionsService();
+            //     var directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+
+            //     directionsService.route({
+            //         origin: origin,
+            //         destination: destination,
+            //         travelMode: 'DRIVING'
+            //     }, function(response, status) {
+            //         if (status === 'OK') {
+            //             directionsRenderer.setDirections(response);
+            //         } else {
+            //             window.alert('Directions request failed due to ' + status);
+            //         }
+            //     });
+            // {{end}}
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{.MapsAPI}}&callback=initMap" async defer></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key={{.MapsAPI}}&libraries=visualization&callback=initMap">
+    </script>
 </html>
 {{end}}
 
