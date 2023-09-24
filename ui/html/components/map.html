@@ -103,6 +103,14 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
+                    waypoints: [
+                        {{range .Waypoints}}
+                            {
+                                location: "{{.Lat}},{{.Lng}}",
+                                stopover: false
+                            },
+                        {{end}}
+                    ],
                     // waypoints: [
                     // {
                     // location: 'Avenida Junco de la Vega',
