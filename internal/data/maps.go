@@ -41,14 +41,14 @@ func (mm *MapModel) GetDefaultRoute() (*Route, error) {
 
 	route := &Route{
 		Start: Place{
-			Name: "Berlin1",
-			Lat:  52.522297,
-			Lng:  13.353296,
+			Name: "Tec de Monterrey",
+			Lat:  25.654638,
+			Lng:  -100.287342,
 		},
 		End: Place{
-			Name: "Berlin2",
-			Lat:  52.508309,
-			Lng:  13.355633,
+			Name: "Costco Valle Oriente",
+			Lat:  25.639979,
+			Lng:  -100.317902,
 		},
 	}
 
@@ -111,20 +111,29 @@ func getBox(avoid []Place) string {
 	// &avoid[areas]=polygon:34.07508,-117.94758;33.89025,-117.73334;33.89759,-118.14015|polygon:54.073334,-118.027496;53.888504,-117.813255;53.895847,-118.22007
 	// for loop for every place in avoid
 	var avoidBox string
-
 	//check if avoid has only one place
 	if len(avoid) == 1 {
-		box1 := Place{Lat: avoid[0].Lat + 0.00300, Lng: avoid[0].Lng - 0.00300}
-		box2 := Place{Lat: avoid[0].Lat - 0.00300, Lng: avoid[0].Lng + 0.00300}
+		box1 := Place{Lat: avoid[0].Lat + 0.00600, Lng: avoid[0].Lng - 0.00550}
+		box2 := Place{Lat: avoid[0].Lat - 0.00550, Lng: avoid[0].Lng + 0.00550}
 		avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+		fmt.Printf("bbox:%f,%f,%f,%f", box1.Lat, box1.Lng, box2.Lat, box2.Lng)
 	} else {
+		var mAvoidBox string
 		for _, place := range avoid {
 			box1 := Place{Lat: place.Lat + 0.00300, Lng: place.Lng - 0.00300}
 			box2 := Place{Lat: place.Lat - 0.00300, Lng: place.Lng + 0.00300}
-			avoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
+			mAvoidBox = fmt.Sprintf("bbox:%f,%f,%f,%f", box1.Lng, box1.Lat, box2.Lng, box2.Lat)
 			// print avoidBox
-			fmt.Println(avoidBox)
+			fmt.Println("AWPAPWPA", mAvoidBox)
+			// add avoidBox to mAvoidBox with the separator |
+			avoidBox += mAvoidBox + "|"
+			//check if the place is the last one
+			if place == avoid[len(avoid)-1] {
+				// remove the last separator
+				avoidBox = avoidBox[:len(avoidBox)-1]
+			}
 		}
+		fmt.Println("wtf", avoidBox)
 	}
 	return avoidBox
 }
@@ -141,24 +150,31 @@ func (mm *MapModel) CalcRoute() (*Route, error) {
 	// }
 	avoid := []Place{
 		{
-			Lat: 52.514706,
-			Lng: 13.369239,
+			Lat: 25.637335,
+			Lng: -100.296567,
+		},
+		{
+			Lat: 25.643113,
+			Lng: -100.301402,
+		},
+		{
+			Lat: 25.655286,
+			Lng: -100.294756,
 		},
 	}
 
 	box := getBox(avoid)
 
 	//avoid := "[areas]=" + box
-
-	originStr := "52.522297,13.353296"
-	destinationStr := "52.508309,13.355633"
+	originStr := "25.654638,-100.287342"
+	destinationStr := "25.639979,-100.317902"
 	start := Place{
-		Lat: 52.522297,
-		Lng: 13.353296,
+		Lat: 25.654638,
+		Lng: -100.287342,
 	}
 	destination := Place{
-		Lat: 52.508309,
-		Lng: 13.355633,
+		Lat: 25.639979,
+		Lng: -100.317902,
 	}
 	route := Route{
 		Start: start,
