@@ -1,8 +1,8 @@
 package data
 
 func (mm *MapModel) GetDangerousArea() ([]*Place, error) {
-	stmt := `SELECT (lat, lng)
-		FROM location_points
+	stmt := `SELECT l.lat, l.lng
+		FROM location_points l
 	`
 
 	rows, err := mm.DB.Query(stmt)
