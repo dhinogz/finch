@@ -19,14 +19,17 @@
                 directionsService.route({
                     origin: origin,
                     destination: destination,
-                    waypoints: [
-                    {
-                    location: 'Straße des 17. Juni',
-                    stopover: false
-                    },{
-                    location: 'Budapester Straße',
-                    stopover: false
-                    }],
+                    // waypoints: [
+                    // {
+                    // location: 'Avenida Junco de la Vega',
+                    // stopover: false
+                    // },{
+                    // location: 'Avenida Luis Elizondo',
+                    // stopover: false
+                    // },{
+                    // location: 'Calle Río Nazas',
+                    // stopover: false 
+                    // }],
                     travelMode: 'DRIVING',
                 }, function(response, status) {
                     if (status === 'OK') {
